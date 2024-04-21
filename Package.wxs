@@ -1,0 +1,61 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="ChuvSU Timetable Widget" Manufacturer="КТ-31-21" Version="1.0.0.0" UpgradeCode="5EB87196-C3FD-4E96-A372-0DC06F8A37A3" Language="1049">
+    <MajorUpgrade DowngradeErrorMessage="Уже установлена более поздняя версия. Установка не может быть продолжена." />
+
+	  <Directory Id="TARGETDIRECTORY" Name="SourceDirectory">
+		  <Directory Id="ProgramFiles64Folder">
+			  <Directory Id="ROOTDIRECTORY" Name="КТ-31-21">
+				  <Directory Id="INSTALLFOLDER" Name="ChuvSU Timetable Widget" />
+			  </Directory>
+		  </Directory>
+	  </Directory>
+
+	  <DirectoryRef Id="INSTALLFOLDER">
+
+		  <Component Id="Exec" Bitness="always64">
+			  <File Id="ChusvSUTimetableWF.exe"
+					Source="$(var.ChusvSUTimetableWF.TargetDir)publish/ChusvSUTimetableWF.exe"
+					KeyPath="true" />
+			  <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
+		  </Component>
+		  <Component Id="Dll">
+			  <File Id="ChusvSUTimetableWF.dll"
+					Source="$(var.ChusvSUTimetableWF.TargetDir)publish/ChusvSUTimetableWF.dll"
+					KeyPath="true" />
+		  </Component>
+		  <Component Id="Quack">
+			  <File Id="quack.wav"
+					Source="$(var.ChusvSUTimetableWF.TargetDir)publish/quack.wav"
+					KeyPath="true" />
+		  </Component>
+		  <Component Id="DPAPI">
+			  <File Id="System.Security.Cryptography.ProtectedData.dll"
+					Source="$(var.ChusvSUTimetableWF.TargetDir)publish/System.Security.Cryptography.ProtectedData.dll"
+					KeyPath="true" />
+		  </Component>
+		  <Component Id ="RuntimeConfig">
+			  <File Id="ChusvSUTimetableWF.runtimeconfig.json"
+					Source="$(var.ChusvSUTimetableWF.TargetDir)publish/ChusvSUTimetableWF.runtimeconfig.json"
+					KeyPath="true" />
+		  </Component>
+	  </DirectoryRef>
+	  
+    <Feature Id="Main" Title="Widget Setup" Level="1">
+		<ComponentRef Id="Exec" />
+		<ComponentRef Id="Dll" />
+		<ComponentRef Id="Quack" />
+		<ComponentRef Id="DPAPI" />
+		<ComponentRef Id="RuntimeConfig" />
+
+
+		<!-- Auto-start via Registry -->
+		<Component Id="AutostartAssistent" Guid="5EB87196-C3FD-4E96-A372-0DC06F8A37A4">
+			<RegistryValue Id="AutostartAssistent.rst" Root="HKMU" Action="write"
+						   Key="Software\Microsoft\Windows\CurrentVersion\Run"
+						   Name="Timetable Widget Autostart"
+						   Value="[INSTALLFOLDER]ChusvSUTimetableWF.exe"
+						   Type="string" />
+		</Component>
+    </Feature>
+  </Package>
+</Wix>
