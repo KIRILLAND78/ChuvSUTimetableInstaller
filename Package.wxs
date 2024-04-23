@@ -39,8 +39,13 @@
 					KeyPath="true" />
 		  </Component>
 	  </DirectoryRef>
+	  <CustomAction Id="Launch" Directory="INSTALLFOLDER" ExeCommand="[INSTALLFOLDER]ChusvSUTimetableWF.exe" />
 	  
-    <Feature Id="Main" Title="Widget Setup" Level="1">
+	  <InstallExecuteSequence>
+		  <Custom Action="Launch" After="InstallFinalize" />
+	  </InstallExecuteSequence>
+	  
+	  <Feature Id="Main" Title="Widget Setup" Level="1">
 		<ComponentRef Id="Exec" />
 		<ComponentRef Id="Dll" />
 		<ComponentRef Id="Quack" />
